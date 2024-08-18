@@ -33,7 +33,7 @@ char **split_string(int max_argument)
 	if (nread == -1)
 	{
 		free(buffer);
-		return (NULL);
+		 exit(EXIT_SUCCESS);
 	}
 
 /** allocating memory for arguments */
