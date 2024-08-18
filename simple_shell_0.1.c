@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include "main.h"
-
+extern char **environ;
 #define MAX_ARGUMENTS 100
 
 /**
@@ -39,7 +39,7 @@ char **split_string(int max_argument)
 /** allocating memory for arguments */
 	argv = malloc(max_argument * sizeof(char *));
 
-/** using strtok with " " and "if there is "\n" to extract each argument command*/
+/** strtok with " " and "if there is "\n" to extract each argument command*/
 	token = strtok(buffer, " \n");
 
 	while (token != NULL && i < max_argument - 1)
@@ -87,9 +87,9 @@ int execute_command(int max_argument)
 
 	if (pid == 0)
 	{
-		execve(argv[0], argv, NULL);
+		execve(argv[0], argv, environ);
 
-		perror("execve");
+		perror(argv[0]);
 		free(argv);
 		exit(EXIT_FAILURE);
 	}
@@ -121,7 +121,6 @@ int main(void)
 		if (isatty(STDIN_FILENO))
 		{
 			printf("#cisfun$ ");
-			execute_command(MAX_ARGUMENTS);
 		}
 
 		if (execute_command(MAX_ARGUMENTS) == -1)
