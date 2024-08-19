@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#define MAX_ARGUMENTS 1024
+#define MAX_ARGUMENTS 2
 extern char **environ;
 char **split_string(int max_argument);
 int execute_command(int max_argument);

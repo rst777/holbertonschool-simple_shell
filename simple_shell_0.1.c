@@ -57,7 +57,7 @@ char **split_string(int max_argument)
 	/** strtok with " " and "if there is "\n" to extract each argument command*/
 	token = strtok(buffer, " \n");
 	while (token != NULL && i < max_argument - 1)
-	{/** put each token into agv[i] */
+	{ /** put each token into agv[i] */
 		argv[i] = strdup(token);
 		if (argv[i] == NULL)
 		{
@@ -143,7 +143,7 @@ int main(void)
 
 		if (execute_command(MAX_ARGUMENTS) == -1)
 		{
-			break;
+			fprintf(stderr, "./shell: No such file or directory\n");
 		}
 	}
 
