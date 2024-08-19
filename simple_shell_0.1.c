@@ -6,9 +6,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#define MAX_ARGUMENTS 10
-#define MAX_COMMAND_LENGTH 1024
-
 /**
  * free_argv - free momory allouée to all arguments.
  * @argv: array of pointer arguments.
@@ -146,7 +143,7 @@ int main(void)
 			printf("#cisfun$ ");
 		}
 
-		if (execute_command(MAX_ARGUMENTS, environ) == -1)
+		if (execute_command(MAX_ARGUMENTS, NULL) == -1)
 		{
 			break;
 		}
