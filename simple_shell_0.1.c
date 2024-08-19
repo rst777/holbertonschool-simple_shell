@@ -106,51 +106,53 @@ int execute_command(int max_argument)
 
 	if (pid == 0)
 	{
-		execve(argv[0], argv, environ);
+		if (execve(argv[0], argv, environ) == -1)
+		{
+			perror(argv[0]);
 
-		perror(argv[0]);
+			free_argv(argv);
+
+			exit(EXIT_FAILURE);
+		}
+
+		else
+
+		{
+			wait(&statut);
+		}
 		free_argv(argv);
-		exit(EXIT_FAILURE);
+		return (0);
 	}
-
-	else
-
-	{
-		wait(&statut);
-		free_argv(argv);
-	}
-
-	return (0);
 }
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 
-/**
- *main - function to execute the programe shell
- *Return: 0 on sucsess
- */
+	/**
+	 *main - function to execute the programe shell
+	 *Return: 0 on sucsess
+	 */
 
-int main(void)
+	int main(void)
 
-{
-	while (1)
 	{
-		if (isatty(STDIN_FILENO))
+		while (1)
 		{
-			printf("#cisfun$ ");
+			if (isatty(STDIN_FILENO))
+			{
+				printf("#cisfun$ ");
+			}
+
+			if (execute_command(MAX_ARGUMENTS) == -1)
+			{
+				break;
+			}
+			if (!isatty(STDIN_FILENO))
+			{
+				break;
+			}
 		}
 
-		if (execute_command(MAX_ARGUMENTS) == -1)
-		{
-			fprintf(stderr, "No such file or directory\n");
-		}
-		if (!isatty(STDIN_FILENO))
-		{
-			break;
-		}
+		return (EXIT_SUCCESS);
 	}
-
-	return (EXIT_SUCCESS);
-}
