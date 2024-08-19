@@ -89,8 +89,9 @@ int execute_command(int max_argument)
 
 	/** we call our function to extract argument and devide it */
 	argv = split_string(max_argument);
-	if (argv == NULL)
+	if (argv == NULL || argv[0] == 0)
 	{
+		free_argv(argv);
 		return (-1);
 	}
 	/** launching  process after our programme*/
@@ -98,8 +99,8 @@ int execute_command(int max_argument)
 
 	if (pid == -1)
 	{
-		perror("faillure");
-		free(argv);
+		perror("fork");
+		free_argv(argv);
 		exit(EXIT_FAILURE);
 	}
 
@@ -143,7 +144,11 @@ int main(void)
 
 		if (execute_command(MAX_ARGUMENTS) == -1)
 		{
-			fprintf(stderr, "./shell: No such file or directory\n");
+			fprintf(stderr, "No such file or directory\n");
+		}
+		if (!isatty(STDIN_FILENO))
+		{
+			break;
 		}
 	}
 
