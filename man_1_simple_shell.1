@@ -1,0 +1,49 @@
+.TH SHELL_PROGRAM 1 "August 2024" "Version 1.0" "User Commands"
+
+.SH NAME
+shell_program \- Simple shell program to execute user commands
+.SH SYNOPSIS
+.B shell_program
+.br
+.B
+.I [no options]
+.SH DESCRIPTION
+.B shell_program
+is a simple shell program that reads commands from the user, splits them into arguments, and executes the corresponding program using system calls.
+.SH USAGE
+After starting the program, you will see a prompt:
+.br
+.B #cisfun$
+.br
+At the prompt, you can type any command followed by its arguments, and the program will execute the command.
+
+.SH FUNCTIONS
+.IP "split_string(int max_argument)"
+Reads a line of input from the user and splits it into individual arguments based on spaces and newline characters. It returns an array of strings, where each element is an argument.
+.TP
+.IP "execute_command(int max_argument)"
+Calls the split_string function to parse the user input into arguments, then creates a child process to execute the command using the execve system call. If the command fails, an error message is displayed.
+
+.SH EXAMPLES
+.B Example 1:
+.br
+Typing:
+.br
+.B echo Hello, World!
+.br
+at the prompt will execute the echo command and print "Hello, World!" to the terminal.
+.br
+.B Example 2:
+.br
+Typing:
+.br
+.B ls -l /home
+.br
+will list the contents of the /home directory in long format.
+
+.SH AUTHOR
+Written by [R.Stef, M Lamine B].
+
+.SH COPYRIGHT
+Copyright © 2024 [Lamine, Stef]. License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
