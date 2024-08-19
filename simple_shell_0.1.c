@@ -50,7 +50,8 @@ char **split_string(int max_argument)
 		free(buffer);
 		exit(EXIT_SUCCESS);
 	}
-	buffer[strcspn(buffer, "\n")] = '\0';
+	else
+		buffer[nread - 1] = '\0';
 	/** allocating memory for arguments */
 	argv = malloc(max_argument * sizeof(char *));
 	if (argv == NULL)
