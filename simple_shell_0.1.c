@@ -7,7 +7,7 @@
 #include "main.h"
 extern char **environ;
 #define MAX_ARGUMENTS 100
-
+#include "main.h"
 /**
 *split_string - function .
 *@max_argument: The number of arguments.
