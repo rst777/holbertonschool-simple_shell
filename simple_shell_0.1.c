@@ -1,67 +1,84 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include "main.h"
-extern char **environ;
-#define MAX_ARGUMENTS 100
-#include "main.h"
+
 /**
-*split_string - function .
-*@max_argument: The number of arguments.
-* This function reads and catchs the arguments (commands) passed on the prompt
-* Return: a pointer of arguments
-**/
+ * free_argv - free momory allouée to all arguments.
+ * @argv: array of pointer arguments.
+ */
+void free_argv(char **argv)
+{
+	int i;
+
+	if (argv == NULL)
+	{
+		return;
+	}
+
+	for (i = 0; argv[i] != NULL; i++)
+	{
+		free(argv[i]);
+	}
+
+	free(argv);
+}
+
+/**
+ *split_string - function .
+ *@max_argument: The number of arguments.
+ * This function reads and catchs the arguments (commands) passed on the prompt
+ * Return: a pointer of arguments
+ **/
 
 /**  Fonction pour lire la ligne de commande et diviser en arguments */
 char **split_string(int max_argument)
-
 {
 	int i;
-	char *token;
-	char **argv;
+	char *token, **argv;
 	char *buffer = NULL;
 	size_t len = 0;
 	ssize_t nread;
 
 	i = 0;
-
-/** using getline to get the commands */
+	/** using getline to get the commands */
 	nread = getline(&buffer, &len, stdin);
 	if (nread == -1)
 	{
 		free(buffer);
-		 exit(EXIT_SUCCESS);
+		exit(EXIT_SUCCESS);
 	}
-
-/** allocating memory for arguments */
+	buffer[strcspn(buffer, "\n")] = '\0';
+	/** allocating memory for arguments */
 	argv = malloc(max_argument * sizeof(char *));
-
-/** strtok with " " and "if there is "\n" to extract each argument command*/
-	token = strtok(buffer, " \n");
-
-	while (token != NULL && i < max_argument - 1)
+	if (argv == NULL)
 	{
-		/** puting it into a pointer called token */
-		argv[i] = token;
+		perror("malloc");
+		free_argv(argv);
+		exit(EXIT_FAILURE);
+	}
+	/** strtok with " " and "if there is "\n" to extract each argument command*/
+	token = strtok(buffer, " \n");
+	while (token != NULL && i < max_argument - 1)
+	{/** put each token into agv[i] */
+		argv[i] = strdup(token);
+		if (argv[i] == NULL)
+		{
+			perror("strdup");
+			free_argv(argv);
+			exit(EXIT_FAILURE);
+		}
 		i++;
 		token = strtok(NULL, " \n");
 	}
 	argv[i] = NULL;
-
-	/**Note : Pas besoin de libérer `buffer` ici car les pointeurs `argv[i]`*/
-
+	free(buffer);
 	return (argv);
 }
 
 /**
-*execute_command - function .
-*@max_argument: The number of arguments.
-* This function excute the arguments (commands) passed to it
-* Return: 0 on sucsess
-**/
+ *execute_command - function .
+ *@max_argument: The number of arguments.
+ * This function excute the arguments (commands) passed to it
+ * Return: 0 on sucsess
+ **/
 
 int execute_command(int max_argument)
 
@@ -70,18 +87,19 @@ int execute_command(int max_argument)
 	int statut;
 	char **argv;
 
-/** we call our function to extract argument and devide it */
+	/** we call our function to extract argument and devide it */
 	argv = split_string(max_argument);
 	if (argv == NULL)
 	{
 		return (-1);
 	}
-/** launching  process after our programme*/
+	/** launching  process after our programme*/
 	pid = fork();
 
 	if (pid == -1)
 	{
 		perror("faillure");
+		free(argv);
 		exit(EXIT_FAILURE);
 	}
 
@@ -90,7 +108,7 @@ int execute_command(int max_argument)
 		execve(argv[0], argv, environ);
 
 		perror(argv[0]);
-		free(argv);
+		free_argv(argv);
 		exit(EXIT_FAILURE);
 	}
 
@@ -98,7 +116,7 @@ int execute_command(int max_argument)
 
 	{
 		wait(&statut);
-		free(argv);
+		free_argv(argv);
 	}
 
 	return (0);
@@ -109,9 +127,9 @@ int execute_command(int max_argument)
 #include <sys/wait.h>
 
 /**
-*main - function to execute the programe shell
-*Return: 0 on sucsess
-*/
+ *main - function to execute the programe shell
+ *Return: 0 on sucsess
+ */
 
 int main(void)
 
