@@ -51,7 +51,7 @@ char **split_string(int max_argument)
 	if (argv == NULL)
 	{
 		perror("malloc");
-		free_argv(argv);
+		free(buffer);
 		exit(EXIT_FAILURE);
 	}
 	/** strtok with " " and "if there is "\n" to extract each argument command*/
@@ -62,6 +62,7 @@ char **split_string(int max_argument)
 		if (argv[i] == NULL)
 		{
 			perror("strdup");
+			free(buffer);
 			free_argv(argv);
 			exit(EXIT_FAILURE);
 		}
@@ -80,7 +81,7 @@ char **split_string(int max_argument)
  * Return: 0 on sucsess
  **/
 
-int execute_command(int max_argument)
+int execute_command(int max_argument, char **envp)
 
 {
 	pid_t pid;
@@ -89,7 +90,7 @@ int execute_command(int max_argument)
 
 	/** we call our function to extract argument and devide it */
 	argv = split_string(max_argument);
-	if (argv == NULL || argv[0] == 0)
+	if (argv == NULL || argv[0] == NULL)
 	{
 		free_argv(argv);
 		return (-1);
@@ -106,53 +107,51 @@ int execute_command(int max_argument)
 
 	if (pid == 0)
 	{
-		if (execve(argv[0], argv, environ) == -1)
+		if (execve(argv[0], argv, envp) == -1)
 		{
 			perror(argv[0]);
-
 			free_argv(argv);
-
 			exit(EXIT_FAILURE);
 		}
+	}
 
 		else
 
 		{
 			wait(&statut);
 		}
-		free_argv(argv);
-		return (0);
-	}
+	free_argv(argv);
+	return(0);
 }
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 
-	/**
-	 *main - function to execute the programe shell
-	 *Return: 0 on sucsess
-	 */
+/**
+ *main - function to execute the programe shell
+ *Return: 0 on sucsess
+ */
 
-	int main(void)
+int main(char **envp)
 
+{
+	while (1)
 	{
-		while (1)
+		if (isatty(STDIN_FILENO))
 		{
-			if (isatty(STDIN_FILENO))
-			{
-				printf("#cisfun$ ");
-			}
-
-			if (execute_command(MAX_ARGUMENTS) == -1)
-			{
-				break;
-			}
-			if (!isatty(STDIN_FILENO))
-			{
-				break;
-			}
+			printf("#cisfun$ ");
 		}
 
-		return (EXIT_SUCCESS);
+		if (execute_command(MAX_ARGUMENTS, envp) == -1)
+		{
+			break;
+		}
+		if (!isatty(STDIN_FILENO))
+		{
+			break;
+		}
 	}
+
+	return (EXIT_SUCCESS);
+}

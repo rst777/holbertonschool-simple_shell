@@ -8,8 +8,7 @@
 #include <sys/wait.h>
 
 #define MAX_ARGUMENTS 2
-extern char **environ;
 char **split_string(int max_argument);
-int execute_command(int max_argument);
-int main(void);
+int execute_command(int max_argument, char **envp);
+int main(char**envp);
 #endif
