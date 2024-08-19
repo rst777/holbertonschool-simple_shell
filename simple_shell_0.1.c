@@ -1,4 +1,13 @@
 #include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+#define MAX_ARGUMENTS 10
+#define MAX_COMMAND_LENGTH 1024
 
 /**
  * free_argv - free momory allouée to all arguments.
@@ -31,13 +40,12 @@ void free_argv(char **argv)
 /**  Fonction pour lire la ligne de commande et diviser en arguments */
 char **split_string(int max_argument)
 {
-	int i;
+	int i = 0;
 	char *token, **argv;
 	char *buffer = NULL;
 	size_t len = 0;
 	ssize_t nread;
 
-	i = 0;
 	/** using getline to get the commands */
 	nread = getline(&buffer, &len, stdin);
 	if (nread == -1)
@@ -97,7 +105,6 @@ int execute_command(int max_argument, char **envp)
 	}
 	/** launching  process after our programme*/
 	pid = fork();
-
 	if (pid == -1)
 	{
 		perror("fork");
@@ -116,24 +123,20 @@ int execute_command(int max_argument, char **envp)
 	}
 
 		else
-
 		{
-			wait(&statut);
+			waitpid(pid, &statut, 0);
 		}
 	free_argv(argv);
 	return(0);
 }
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
 
 /**
  *main - function to execute the programe shell
  *Return: 0 on sucsess
  */
 
-int main(char **envp)
+int main(void)
 
 {
 	while (1)
@@ -143,7 +146,7 @@ int main(char **envp)
 			printf("#cisfun$ ");
 		}
 
-		if (execute_command(MAX_ARGUMENTS, envp) == -1)
+		if (execute_command(MAX_ARGUMENTS, environ) == -1)
 		{
 			break;
 		}
