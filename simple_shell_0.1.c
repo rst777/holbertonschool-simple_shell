@@ -76,6 +76,7 @@ char **split_string(int max_argument)
 		token = strtok(NULL, " \n");
 	}
 	argv[i] = NULL;
+
 	free(buffer);
 	return (argv);
 }
@@ -112,6 +113,7 @@ int execute_command(int max_argument, char **envp)
 	if (pid == -1)
 	{
 		perror("fork");
+		free(command_path);
 		free_argv(argv);
 		exit(EXIT_FAILURE);
 	}
