@@ -8,16 +8,11 @@
 char *find_command_path(char *command)
 {
 	char *path = NULL;
-	char *token;
+	char *token, *path_copy;
 	char full_path[MAX_COMMAND_LENGTH];
 	struct stat st;
 	int i;
-/* Si la commande est déjà un chemin absolu ou relatif */
-	if (stat(command, &st) == 0 && (st.st_mode & S_IXUSR))
-	{
-		return (strdup(command));
-	}
-	/* Rechercher la variable d'environnement PATH */
+	/* Rechercher la variable d'environnement PATH dans environ */
 	for (i = 0; environ[i] != NULL; i++)
 	{
 		if (strncmp(environ[i], "PATH=", 5) == 0)
@@ -26,13 +21,18 @@ char *find_command_path(char *command)
 			break;
 		}
 	}
-
-	if (path == NULL)
+		if (path == NULL)
 	{
 		return (NULL);
 	}
+	/* Créer une copie de la variable PATH pour utiliser strtok sans problème */
+		path_copy = strdup(path);
+		if (path_copy == NULL)
+		{
+			return (NULL);
+		}
 	/*	Diviser PATH en tokens et rechercher la commande */
-	token = strtok(path, ":");
+	token = strtok(path_copy, ":");
 	while (token != NULL)
 	{
 		snprintf(full_path, sizeof(full_path), "%s/%s", token, command);
@@ -122,8 +122,10 @@ char **split_string(int max_argument)
 int execute_command(int max_argument, char **envp)
 {
 	pid_t pid;
+	int statut;
 	char **argv;
 	char *command_path;
+
 	/* we call our function to extract argument and devide it */
 	argv = split_string(max_argument);
 	if (argv == NULL || argv[0] == NULL)
@@ -131,7 +133,15 @@ int execute_command(int max_argument, char **envp)
 		free_argv(argv);
 		return (-1);
 	}
+	/* Si le chemin est absolu ou relatif, pas besoin de chercher dans PATH */
+	if (argv[0][0] == '/' || argv[0][0] == '.')
+	{
+		command_path = strdup(argv[0]);
+	}
+	else
+	{
 	command_path = find_command_path(argv[0]);
+	}
 	if (command_path == NULL)
 	{
 		fprintf(stderr, "./hsh: %s: No such file or directory\n", argv[0]);
@@ -143,6 +153,7 @@ int execute_command(int max_argument, char **envp)
 	if (pid == -1)
 	{
 		perror("fork");
+		free(command_path);
 		free_argv(argv);
 		exit(EXIT_FAILURE);
 	}
@@ -160,7 +171,7 @@ int execute_command(int max_argument, char **envp)
 		else
 		{
 		/* Dans le processus père, attendre la fin du fils */
-		waitpid(pid, NULL, 0);
+		waitpid(pid, &statut, 0);
 		}
 		free(command_path);
 		free_argv(argv);
