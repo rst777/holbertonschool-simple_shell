@@ -7,11 +7,12 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
 #define MAX_ARGUMENTS 10
 #define MAX_COMMAND_LENGTH 1024
 
-
+extern char **environ;
 void free_argv(char **argv);
 char **split_string(int max_argument);
 int execute_command(int max_argument, char **envp);
