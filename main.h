@@ -12,7 +12,7 @@ extern char **environ;
 #define MAX_ARGUMENTS 50
 #define MAX_COMMAND_LENGTH 1024
 
-
+void check_exit_command(char *buffer);
 char *find_command_path(const char *command);
 char *my_getenv(const char *name);
 void free_argv(char **argv);

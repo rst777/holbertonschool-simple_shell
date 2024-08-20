@@ -37,11 +37,11 @@ void free_argv(char **argv)
 /**  Fonction pour lire la ligne de commande et diviser en arguments */
 char **split_string(int max_argument)
 {
-	int i = 0;
 	char *token, **argv;
 	char *buffer = NULL;
 	size_t len = 0;
 	ssize_t nread;
+	int i = 0;
 
 	/** using getline to get the commands */
 	nread = getline(&buffer, &len, stdin);
@@ -51,7 +51,10 @@ char **split_string(int max_argument)
 		exit(EXIT_SUCCESS);
 	}
 	else
+	{
 		buffer[nread - 1] = '\0';
+	}
+	check_exit_command(buffer);
 	/** allocating memory for arguments */
 	argv = malloc(max_argument * sizeof(char *));
 	if (argv == NULL)
@@ -72,6 +75,7 @@ char **split_string(int max_argument)
 			free_argv(argv);
 			exit(EXIT_FAILURE);
 		}
+
 		i++;
 		token = strtok(NULL, " \n");
 	}
@@ -109,28 +113,29 @@ int execute_command(int max_argument, char **envp)
 		free_argv(argv);
 		return (-1);
 	}
-	pid = fork(); /** start processing arguments */
-	if (pid == -1)
-	{
-		perror("fork");
-		free(command_path);
-		free_argv(argv);
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0)
-	{
-		if (execve(command_path, argv, envp) == -1)
+
+		pid = fork(); /** start processing arguments */
+		if (pid == -1)
 		{
-			perror(command_path);
+			perror("fork");
 			free(command_path);
 			free_argv(argv);
 			exit(EXIT_FAILURE);
 		}
-	}
-	else
-	{
-		waitpid(pid, &statut, 0);
-	}
+		if (pid == 0)
+		{
+			if (execve(command_path, argv, envp) == -1)
+			{
+				perror(command_path);
+				free(command_path);
+				free_argv(argv);
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			waitpid(pid, &statut, 0);
+		}
 	free(command_path);
 	free_argv(argv);
 	return (0);
