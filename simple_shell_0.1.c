@@ -30,7 +30,7 @@ void free_argv(char **argv)
 /**
  *split_string - function .
  *@max_argument: The number of arguments.
- * This function reads and catchs the arguments (commands) passed on the prompt
+ * reads and catchs the arguments (commands) passed on the prompt
  * Return: a pointer of arguments
  **/
 
@@ -93,41 +93,46 @@ int execute_command(int max_argument, char **envp)
 	pid_t pid;
 	int statut;
 	char **argv;
+	char *command_path;
 
-	/** we call our function to extract argument and devide it */
-	argv = split_string(max_argument);
+	argv = split_string(max_argument); /** call our function */
 	if (argv == NULL || argv[0] == NULL)
 	{
 		free_argv(argv);
 		return (-1);
 	}
-	/** launching  process after our programme*/
-	pid = fork();
+	command_path = find_command_path(argv[0]); /** check path command */
+	if (command_path == NULL)
+	{
+		perror("PATH");
+		free_argv(argv);
+		return (-1);
+	}
+	pid = fork(); /** start processing arguments */
 	if (pid == -1)
 	{
 		perror("fork");
 		free_argv(argv);
 		exit(EXIT_FAILURE);
 	}
-
 	if (pid == 0)
 	{
-		if (execve(argv[0], argv, envp) == -1)
+		if (execve(command_path, argv, envp) == -1)
 		{
-			perror(argv[0]);
+			perror(command_path);
+			free(command_path);
 			free_argv(argv);
 			exit(EXIT_FAILURE);
 		}
 	}
-
-		else
-		{
-			waitpid(pid, &statut, 0);
-		}
+	else
+	{
+		waitpid(pid, &statut, 0);
+	}
+	free(command_path);
 	free_argv(argv);
-	return(0);
+	return (0);
 }
-
 
 /**
  *main - function to execute the programe shell
@@ -141,12 +146,13 @@ int main(void)
 	{
 		if (isatty(STDIN_FILENO))
 		{
-			printf("#cisfun$ ");
+			printf(":) ");
+			fflush(stdout);
 		}
 
 		if (execute_command(MAX_ARGUMENTS, NULL) == -1)
 		{
-			break;
+			continue;
 		}
 		if (!isatty(STDIN_FILENO))
 		{
@@ -154,5 +160,5 @@ int main(void)
 		}
 	}
 
-	return (EXIT_SUCCESS);
+	return (0);
 }
