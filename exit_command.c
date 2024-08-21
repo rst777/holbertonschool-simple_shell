@@ -9,6 +9,6 @@ void check_exit_command(char *buffer)
 	{
 		printf("exit\n");
 		free(buffer);
-		exit(EXIT_SUCCESS);
+		exit(0);
 	}
 }
