@@ -48,7 +48,7 @@ char **split_string(int max_argument)
 	if (nread == -1)
 	{
 		free(buffer);
-		exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	}
 	else
 		buffer[nread - 1] = '\0';
