@@ -52,8 +52,11 @@ char **split_string(int max_argument)
 			free(buffer);
 			exit(EXIT_SUCCESS);
 		}
+		else
+		{
 		free(buffer);
 		exit(EXIT_SUCCESS);
+	}
 	}
 	else
 	{
