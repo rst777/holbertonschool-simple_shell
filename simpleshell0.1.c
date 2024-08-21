@@ -48,7 +48,7 @@ char **split_string(int max_argument)
 	if (nread == -1)
 	{
 		free(buffer);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	else
 		buffer[nread - 1] = '\0';
@@ -150,7 +150,10 @@ int main(void)
 		}
 		if (!isatty(STDIN_FILENO))
 		{
+			if(feof(stdin))
+			{
 			break;
+			}
 		}
 	}
 
