@@ -47,6 +47,11 @@ char **split_string(int max_argument)
 	nread = getline(&buffer, &len, stdin);
 	if (nread == -1)
 	{
+		if (feof(stdin)) /** Handle end-of-file (Ctrl+D)*/
+		{
+			free(buffer);
+			exit(EXIT_SUCCESS);
+		}
 		free(buffer);
 		exit(EXIT_SUCCESS);
 	}
@@ -114,28 +119,28 @@ int execute_command(int max_argument, char **envp)
 		return (-1);
 	}
 
-		pid = fork(); /** start processing arguments */
-		if (pid == -1)
+	pid = fork(); /** start processing arguments */
+	if (pid == -1)
+	{
+		perror("fork");
+		free(command_path);
+		free_argv(argv);
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+	{
+		if (execve(command_path, argv, envp) == -1)
 		{
-			perror("fork");
+			perror(command_path);
 			free(command_path);
 			free_argv(argv);
 			exit(EXIT_FAILURE);
 		}
-		if (pid == 0)
-		{
-			if (execve(command_path, argv, envp) == -1)
-			{
-				perror(command_path);
-				free(command_path);
-				free_argv(argv);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			waitpid(pid, &statut, 0);
-		}
+	}
+	else
+	{
+		waitpid(pid, &statut, 0);
+	}
 	free(command_path);
 	free_argv(argv);
 	return (0);
