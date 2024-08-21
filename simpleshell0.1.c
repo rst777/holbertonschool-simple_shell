@@ -60,36 +60,35 @@ char **split_string(int max_argument)
 	}
 	else
 	{
-		if (nread > 0 && buffer[nread - 1] == '\n')
-			buffer[nread - 1] = '\0';
+		buffer[nread - 1] = '\0';
 	}
-	skip_spaces(buffer);
-	/** allocating memory for arguments */
-	argv = malloc(max_argument * sizeof(char *));
-	if (argv == NULL)
+	
+/** allocating memory for arguments */
+argv = malloc(max_argument * sizeof(char *));
+if (argv == NULL)
+{
+	perror("malloc");
+	free(buffer);
+	exit(EXIT_FAILURE);
+}
+/** strtok with " " and "if there is "\n" to extract each argument command*/
+token = strtok(buffer, " \n");
+while (token != NULL && i < max_argument - 1)
+{ /** put each token into agv[i] */
+	argv[i] = strdup(token);
+	if (argv[i] == NULL)
 	{
-		perror("malloc");
+		perror("strdup");
 		free(buffer);
+		free_argv(argv);
 		exit(EXIT_FAILURE);
 	}
-	/** strtok with " " and "if there is "\n" to extract each argument command*/
-	token = strtok(buffer, " \n");
-	while (token != NULL && i < max_argument - 1)
-	{ /** put each token into agv[i] */
-		argv[i] = strdup(token);
-		if (argv[i] == NULL)
-		{
-			perror("strdup");
-			free(buffer);
-			free_argv(argv);
-			exit(EXIT_FAILURE);
-		}
-		i++;
-		token = strtok(NULL, " \n");
-	}
-	argv[i] = NULL;
-	free(buffer);
-	return (argv);
+	i++;
+	token = strtok(NULL, " \n");
+}
+argv[i] = NULL;
+free(buffer);
+return (argv);
 }
 
 /**

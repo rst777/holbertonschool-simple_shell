@@ -15,7 +15,6 @@ extern char **environ;
 
 
 
-void skip_spaces(char *str);
 void free_argv(char **argv);
 char **split_string(int max_argument);
 int execute_command(int max_argument, char **envp);
