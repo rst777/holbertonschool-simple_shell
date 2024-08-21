@@ -7,7 +7,8 @@ void check_exit_command(char *buffer)
 {
 	if (strcmp(buffer, "exit") == 0)
 	{
+		printf("exit\n");
 		free(buffer);
-		exit(0);
+		exit(EXIT_SUCCESS);
 	}
 }
