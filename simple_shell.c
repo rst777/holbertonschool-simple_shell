@@ -54,9 +54,9 @@ char **split_string(int max_argument)
 		}
 		else
 		{
-		free(buffer);
-		exit(EXIT_SUCCESS);
-	}
+			free(buffer);
+			exit(EXIT_SUCCESS);
+		}
 	}
 	else
 	{
@@ -114,6 +114,14 @@ int execute_command(int max_argument, char **envp)
 		free_argv(argv);
 		return (-1);
 	}
+	/**handle "env" command*/
+	if (strcmp(argv[0], "env") == 0)
+	{
+		print_env(); /** prints variables environnement */
+		free_argv(argv);
+		return (0);
+	}
+
 	command_path = find_command_path(argv[0]); /** check path command */
 	if (command_path == NULL)
 	{
