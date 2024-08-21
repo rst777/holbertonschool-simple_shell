@@ -47,8 +47,17 @@ char **split_string(int max_argument)
 	nread = getline(&buffer, &len, stdin);
 	if (nread == -1)
 	{
-		free(buffer);
-		exit(EXIT_SUCCESS);
+		if (feof(stdin))
+		{
+			free(buffer);
+			return (NULL);
+		}
+		else
+		{
+			perror("getline");
+			free(buffer);
+			exit(EXIT_SUCCESS);
+		}
 	}
 	else
 		buffer[nread - 1] = '\0';
@@ -120,14 +129,13 @@ int execute_command(int max_argument, char **envp)
 		}
 	}
 
-		else
-		{
-			waitpid(pid, &statut, 0);
-		}
+	else
+	{
+		waitpid(pid, &statut, 0);
+	}
 	free_argv(argv);
-	return(0);
+	return (0);
 }
-
 
 /**
  *main - function to execute the programe shell
@@ -150,10 +158,7 @@ int main(void)
 		}
 		if (!isatty(STDIN_FILENO))
 		{
-			if(feof(stdin))
-			{
 			break;
-			}
 		}
 	}
 
