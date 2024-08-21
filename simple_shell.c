@@ -63,6 +63,7 @@ char **split_string(int max_argument)
 		buffer[nread - 1] = '\0';
 	}
 	check_exit_command(buffer);
+	skip_spaces(buffer);
 	/** allocating memory for arguments */
 	argv = malloc(max_argument * sizeof(char *));
 	if (argv == NULL)
