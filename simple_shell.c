@@ -67,8 +67,6 @@ char **split_string(int max_argument)
 		buffer[nread - 1] = '\0';
 	}
 
-	check_exit_command(buffer);
-
 	/** allocating memory for arguments */
 	argv = malloc(max_argument * sizeof(char *));
 	if (argv == NULL)
@@ -120,13 +118,7 @@ int execute_command(int max_argument, char **envp)
 		free_argv(argv);
 		return (-1);
 	}
-	/**handle "env" command*/
-	if (strcmp(argv[0], "env") == 0)
-	{
-		print_env(); /** prints variables environnement */
-		free_argv(argv);
-		return (0);
-	}
+
 
 	command_path = find_command_path(argv[0]); /** check path command */
 	if (command_path == NULL)
