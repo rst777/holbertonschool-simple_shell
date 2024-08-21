@@ -47,48 +47,37 @@ char **split_string(int max_argument)
 	nread = getline(&buffer, &len, stdin);
 	if (nread == -1)
 	{
-		if (feof(stdin)) /** Handle end-of-file (Ctrl+D)*/
-		{
-			free(buffer);
-			exit(EXIT_SUCCESS);
-		}
-		else
-		{
-			free(buffer);
-			exit(EXIT_SUCCESS);
-		}
+		free(buffer);
+		exit(EXIT_SUCCESS);
 	}
 	else
-	{
 		buffer[nread - 1] = '\0';
-	}
-	
-/** allocating memory for arguments */
-argv = malloc(max_argument * sizeof(char *));
-if (argv == NULL)
-{
-	perror("malloc");
-	free(buffer);
-	exit(EXIT_FAILURE);
-}
-/** strtok with " " and "if there is "\n" to extract each argument command*/
-token = strtok(buffer, " \n");
-while (token != NULL && i < max_argument - 1)
-{ /** put each token into agv[i] */
-	argv[i] = strdup(token);
-	if (argv[i] == NULL)
+	/** allocating memory for arguments */
+	argv = malloc(max_argument * sizeof(char *));
+	if (argv == NULL)
 	{
-		perror("strdup");
+		perror("malloc");
 		free(buffer);
-		free_argv(argv);
 		exit(EXIT_FAILURE);
 	}
-	i++;
-	token = strtok(NULL, " \n");
-}
-argv[i] = NULL;
-free(buffer);
-return (argv);
+	/** strtok with " " and "if there is "\n" to extract each argument command*/
+	token = strtok(buffer, " \n");
+	while (token != NULL && i < max_argument - 1)
+	{ /** put each token into agv[i] */
+		argv[i] = strdup(token);
+		if (argv[i] == NULL)
+		{
+			perror("strdup");
+			free(buffer);
+			free_argv(argv);
+			exit(EXIT_FAILURE);
+		}
+		i++;
+		token = strtok(NULL, " \n");
+	}
+	argv[i] = NULL;
+	free(buffer);
+	return (argv);
 }
 
 /**
@@ -131,13 +120,14 @@ int execute_command(int max_argument, char **envp)
 		}
 	}
 
-	else
-	{
-		waitpid(pid, &statut, 0);
-	}
+		else
+		{
+			waitpid(pid, &statut, 0);
+		}
 	free_argv(argv);
-	return (0);
+	return(0);
 }
+
 
 /**
  *main - function to execute the programe shell
@@ -156,7 +146,7 @@ int main(void)
 
 		if (execute_command(MAX_ARGUMENTS, NULL) == -1)
 		{
-			continue;
+			break;
 		}
 		if (!isatty(STDIN_FILENO))
 		{
