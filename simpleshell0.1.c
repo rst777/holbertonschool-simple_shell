@@ -56,7 +56,7 @@ char **split_string(int max_argument)
 		{
 			perror("getline");
 			free(buffer);
-			exit(EXIT_SUCCESS);
+			exit(EXIT_FAILURE);
 		}
 	}
 	else
@@ -154,7 +154,7 @@ int main(void)
 
 		if (execute_command(MAX_ARGUMENTS, NULL) == -1)
 		{
-			continue;
+			break;
 		}
 		if (!isatty(STDIN_FILENO))
 		{
