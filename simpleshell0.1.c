@@ -152,11 +152,12 @@ int main(void)
 		if (isatty(STDIN_FILENO))
 		{
 			printf("#cisfun$ ");
+			fflush(stdout);
 		}
 
 		if (execute_command(MAX_ARGUMENTS, NULL) == -1)
 		{
-			continue;
+			break;
 		}
 		if (!isatty(STDIN_FILENO))
 		{
