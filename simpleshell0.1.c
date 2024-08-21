@@ -59,8 +59,10 @@ char **split_string(int max_argument)
 			exit(EXIT_FAILURE);
 		}
 	}
-	else
+	if (nread > 0 && buffer[nread - 1] == '\n')
+	{
 		buffer[nread - 1] = '\0';
+	}
 	/** allocating memory for arguments */
 	argv = malloc(max_argument * sizeof(char *));
 	if (argv == NULL)
