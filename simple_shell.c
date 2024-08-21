@@ -68,8 +68,7 @@ char **split_string(int max_argument)
 	}
 
 	check_exit_command(buffer);
-	skip_spaces(buffer);
-	
+
 	/** allocating memory for arguments */
 	argv = malloc(max_argument * sizeof(char *));
 	if (argv == NULL)
@@ -182,7 +181,7 @@ int main(void)
 
 		if (execute_command(MAX_ARGUMENTS, NULL) == -1)
 		{
-			continue;
+			break;
 		}
 		if (!isatty(STDIN_FILENO))
 		{

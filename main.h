@@ -12,7 +12,6 @@ extern char **environ;
 #define MAX_ARGUMENTS 50
 #define MAX_COMMAND_LENGTH 1024
 
-void skip_spaces(char *str);
 void print_env(void);
 void check_exit_command(char *buffer);
 char *find_command_path(const char *command);
