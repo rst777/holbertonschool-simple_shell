@@ -156,7 +156,7 @@ int main(void)
 
 		if (execute_command(MAX_ARGUMENTS, NULL) == -1)
 		{
-			break;
+			continue;
 		}
 		if (!isatty(STDIN_FILENO))
 		{
