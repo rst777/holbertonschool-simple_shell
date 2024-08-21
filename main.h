@@ -9,12 +9,14 @@
 #include <sys/wait.h>
 
 extern char **environ;
-#define MAX_ARGUMENTS 2
+#define MAX_ARGUMENTS 50
 #define MAX_COMMAND_LENGTH 1024
 
-
-
-
+void skip_spaces(char *str);
+void print_env(void);
+void check_exit_command(char *buffer);
+char *find_command_path(const char *command);
+char *my_getenv(const char *name);
 void free_argv(char **argv);
 char **split_string(int max_argument);
 int execute_command(int max_argument, char **envp);
