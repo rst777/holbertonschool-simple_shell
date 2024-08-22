@@ -1,30 +1,98 @@
-.TH SHELL_PROGRAM 1 "August 2024" "Version 1.0" "User Commands"
+.Dd 23/08/24                       \" Date
+.Dt SIMPLE_SHELL 1                 \" Program name and manual section number
+.Os Ubuntu 22.04                      \" Operating System
 
-.SH NAME
-shell_program \- Simple shell program to execute user commands
-.SH SYNOPSIS
-.B shell_program
-.br
+.Sh NAME                           \" Section Header - required
+.Nm simple_shell
+.Nd A simple shell program for command execution and argument handling
+.Pp
+
+.Sh SYNOPSIS \" Section Header - required
+.Pp
+.Br
+.Nm Library :
+.Pp
+.I #include "main.h"
+.Pp
+.I #include <stdio.h>
+.Pp
+.I #include <sys/types.h>
+.Pp
+.I #include <string.h>
+.Pp
+.I #include <unistd.h>
+.Pp
+.I #include <sys/wait.h>
+.Pp
+
+.Nm functions
+.Pp
+void free_argv(char **argv);
+.Pp
+char **split_string(int max_argument);
+.Pp
+int execute_command(int max_argument, char **envp);
+.Pp
+int main(void);
+.Pp
+char *find_command_path(const char *command);
+.Pp
+void print_env(void);
+.Pp
+char *my_getenv(const char *name);
+.Ed
+
+.Sh DESCRIPTION                    \" Section Header - required
+.Nm simple_shell
+.Pp
+is a C program that implements a minimal shell. It provides functions to handle arguments,
+execute commands, and manage memory. The shell reads commands from the standard input,
+processes them, and executes them using system calls. After compiling the program,
+it can be run to simulate a basic shell environment.
+.Pp
 .B
-.I [no options]
-.SH DESCRIPTION
-.B shell_program
-is a simple shell program that reads commands from the user, splits them into arguments, and executes the corresponding program using system calls.
-.SH USAGE
+.Pp
+
+The key functions included in
+.Nm
+are:
+
+.Bl -tag -width indent
+.It Xr free_argv 3
+Frees memory allocated for an array of strings (arguments).
+.It Xr split_string 3
+Reads a command line and splits it into arguments.
+.It Xr execute_command 3
+Executes a command based on the parsed arguments.
+.It Xr find_command_path 3
+Finds the full path of a command.
+.It Xr print_env 3
+Prints environment variables.
+.It Xr my_getenv 3
+Gets an environment variable's value.
+.El
+.Sh USAGE
+.PP
+.Nm compilation
+.Pp
+gcc *.c main.h -o Simple_shell
+.Pp
+.Nm start
+.Pp
 After starting the program, you will see a prompt:
-.br
-.B #cisfun$
-.br
-At the prompt, you can type any command followed by its arguments, and the program will execute the command.
+.Pp
+you can inter a command builting in our program and the program will execute the command
+.Pp
+.
+.Nm Exemple:
+.Pp
+ls -l  or pwd
+.Pp
+you can use it in non interactif mod
+.Pp
+echo "/bin/ls" | ./simple_shell
+.Pp
 
-.SH FUNCTIONS
-.IP "split_string(int max_argument)"
-Reads a line of input from the user and splits it into individual arguments based on spaces and newline characters. It returns an array of strings, where each element is an argument.
-.TP
-.IP "execute_command(int max_argument)"
-Calls the split_string function to parse the user input into arguments, then creates a child process to execute the command using the execve system call. If the command fails, an error message is displayed.
-
-.SH EXAMPLES
 .B Example 1:
 .br
 Typing:
