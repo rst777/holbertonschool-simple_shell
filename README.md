@@ -1,10 +1,11 @@
 # holbertonschool-simple_shell## Table of Contents
 ## Background Context
+
 Write a simple UNIX command interpreter.
 
 ![alt text](shell.jpeg)
 
-^ “The Gates of Shell”, by Spencer Cheng, featuring Julien Barbier
+“The Gates of Shell”, by Spencer Cheng, featuring Julien Barbier
 
 - [Flowcharts](#flowcharts)
 - [Getppid et Getpid](#getppid_getpid)
@@ -20,70 +21,69 @@ Write a simple UNIX command interpreter.
 
 # Getppid et Getpid
 
- Sont des fonctions intégrées définies dans la bibliothèque `unistd.h` .
-
-`getppid()` : renvoie l'ID de processus du parent du processus appelant. Si le processus appelant a été créé par la fonction `fork()` et que le processus parent existe toujours au moment de l'appel de la fonction `getppid`, cette fonction renvoie l'ID de processus du processus parent. Sinon, cette fonction renvoie une valeur de 1 qui est l'identifiant du processus d'initialisation .
+ Are integrated functions defined in the Unistd.H` library.
+`getppid()` : Returns the parent process of the calling process.If the calling process was created by the `Fork () function and the parent process still exists at the time of the call of the` Getppid` function, this function returns the process ID of the parent process.Otherwise, this function returns a value of 1 which is the identifier of the initialization process.
 
 ## Syntaxe:
 ```c
 pid_t getppid(void);
 ```
-## Type de retour :
-`getppid()`
+## Type of return:
+`Getppid ()`
 
-renvoie l'ID de processus du parent du processus actuel. Il ne génère jamais d’erreur et réussit donc toujours.
+Returns the parent process ID from the current process.He never generates an error and therefore always succeeds.
 
 
-# Valeur max d'un ID
-Pour écrire un script shell qui imprime la valeur maximale qu'un `ID de processus (PID)` peut avoir, tu peux utiliser la commande cat pour lire le fichier `/proc/sys/kernel/pid_max`. Ce fichier contient la valeur maximale qu'un PID peut atteindre sur ton système.
+# Max value of an ID
+To write a shell script that prints the maximum value than a process ID (PID) `Can have, you can use the CAT command to read the`/proc/sys/Kernel/Pid_max` file.This file contains the maximum value that a PID can reach on your system.
 
-## Exemple de Script Shell
-### Voici un exemple de script shell qui fait cela :
-```c
-#!/bin/bash
-```
-### Lire la valeur maximale d'un PID depuis /proc/sys/kernel/pid_max
-```c
-max_pid=$(cat /proc/sys/kernel/pid_max)
-```
-### Afficher la valeur maximale du PID
-```c
-echo "The maximum value a process ID can be: $max_pid"
-```
+## Example of Shell Script
+### Here is an example of shell script does this:
+`` c
+#!/Bin/bash
+`` `
+### Read the maximum value of a PID from/proc/sys/kernel/pid_max
+`` c
+max_pid = $ (cat/proc/sys/kernel/pid_max)
+`` `
+### Display the maximum value of the PID
+`` c
+Echo "The maximum value a process ID can be: $ max_pid"
+`` `
 
 # execve
 
-L'appel système `execve` est utilisé pour remplacer l'image d'un processus en cours d'exécution par une nouvelle image, qui est celle d'un autre programme. Lorsqu'un processus appelle execve, le programme en cours est remplacé par le programme spécifié dans l'appel, et si execve réussit, il ne retourne jamais au programme original.
+The `` Execve` System Call is used to replace the image of an executed process with a new image, which is that of another program.When a process calls, the current program is replaced by the program specified in the call, and if Execve succeeds, it never returns to the original program.
 
-## Points importants sur execve
-Remplacement complet du processus : Le programme en cours est complètement remplacé par le nouveau programme. Cela signifie que le code après execve ne sera jamais exécuté si execve réussit.
+# Important points on Execve
+Complete replacement of the process: The current program is completely replaced by the new program.This means that the code after Execve will never be executed if Execve succeeds.
 
-## Trois arguments principaux :
+## Three main arguments:
 
-Chemin vers le programme :
-Le chemin absolu du programme à exécuter (ex. /bin/ls).
-Arguments : Un tableau de chaînes de caractères (argv) qui représente les arguments du programme (ex. argv[0] est le nom du programme).
+Path to the program:
+The absolute path of the program to be executed (eg /bin /ls).
+Arguments: A table of character strings (ARGV) which represents the arguments of the program (eg ARGV [0] is the name of the program).
 
-## Environnement :
-Un tableau de chaînes de caractères représentant l'environnement du processus (ex. envp contient les variables d'environnement comme PATH).
+## Environment :
+A table of character strings representing the environment of the process (e.g. ESPP contains environmental variables like path).
 
 # stat
 
-En C, `stat` est une fonction utilisée pour obtenir des informations sur un fichier ou un répertoire. Cette fonction remplit une structure stat avec des détails sur le fichier, comme sa taille, ses permissions, sa date de modification, etc.
+In C, `Stat` is a function used to obtain information on a file or directory.This function fulfills a Stat structure with details on the file, such as its size, its permissions, its date of modification, etc.
 
-Voici comment cela fonctionne :
-`Structure stat` : Avant d'appeler la fonction, tu dois déclarer une variable de type `struct stat`qui va contenir les informations sur le fichier.
+Here's how it works:
+`Stat`: Before calling the function, you must declare a variable type `Struct Stat`qui that will contain information on the file.
 
-Appel de la fonction `stat` : Tu passes le nom du fichier et l'adresse de ta `structure stat` à la fonction. La fonction remplit la structure avec les données du fichier.
+Call of the function `Stat`: You pass the name of the file and the address of your structure stati 'to the function.The function fulfills the structure with the file data.
 
-Accès aux informations : Après l'appel de `stat`, tu peux accéder aux différentes informations via les champs de la `structure stat`.
+Access to information: After calling `stat`, you can access the various information via the fields of the Stat` Structure.
 
-# strtok
+# Strtok
 
-La fonction ``strtok`` en C est utilisée pour segmenter une chaîne de caractères en sous-chaînes appelées `"tokens"`, en utilisant des délimiteurs spécifiés. Elle prend en entrée un pointeur vers la chaîne à segmenter et une chaîne de délimiteurs. Lors du premier appel, la chaîne complète est analysée, et pour les appels suivants, on passe `NULL` pour continuer l'analyse de la même chaîne. ``strtok`` renvoie un pointeur vers chaque token successif, permettant de parcourir la chaîne segmentée token par token.
+The Strtok function in C is used to segment a chain of characteristics in sub-chains called "tokens" `, using specified delimitors.She takes a pointer to the chain to segment and a chain of delimitors as a starter.During the first call, the complete chain is analyzed, and for the following calls, we make a null to continue the analysis of the same channel. Strtok 'returns a pointer to each successive token, allowing to travel the token segmented chain by Token.
 
-Exemple:
-```c
+Example:
+`` c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 }
 
 ```
-Exemple de commande :
+Example of command:
 ```c
 
 ./program "Temporary string to be parsed"
@@ -125,152 +125,151 @@ sortie:
 
 # Main.h
 
-Garde de protection (#ifndef, #define, #endif):
+Protective guard (#ifndef, #define, #endif):
 
-Inclusions de bibliothèques:
+Library inclusions:
 
-Vous incluez les bibliothèques standard nécessaires (stdio.h, stdlib.h, unistd.h, string.h, sys/types.h, sys/wait.h). Ces inclusions fournissent les définitions nécessaires pour les fonctions et types utilisés dans votre code.
-Déclaration des variables externes:
+You include the necessary standard libraries (Stdio.h, Stdlib.h, Unistd.h, String.h, Sys/Type.h, Sys/Wait.h).These inclusions provide the necessary definitions for the functions and types used in your code.
+Declaration of external variables:
 
-extern char **environ; : Déclare la variable globale environ qui contient les variables d'environnement. C'est une bonne pratique de déclarer environ comme extern si elle est utilisée dans plusieurs fichiers source.
-Définition des constantes:
+approximately char **;: Declares the approximately global variable which contains the environment variables.It is a good practice to declare approximately as extern if it is used in several source files.
+Definition of constants:
 
-#define MAX_ARGUMENTS 50 : Définit le nombre maximum d'arguments que le shell peut gérer. Vous pouvez ajuster cette valeur en fonction de vos besoins.
-#define MAX_COMMAND_LENGTH 1024 : Définit la longueur maximale d'une commande. Vous pouvez également ajuster cette valeur selon les besoins de votre shell.
-Déclaration des fonctions:
+#define max_arguments 50: Defines the maximum number of arguments that the shell can manage.You can adjust this value according to your needs.
+#define max_command_length 1024: defines the maximum length of a command.You can also adjust this value according to the needs of your shell.
+Function declaration:
 
-`void print_env(void)`; : Déclaration de la fonction qui affiche les variables d'environnement.
+`void print_env (void);`: Declaration of the function that displays the environment variables.
 
-`void check_exit_command(char *buffer)`; : Déclaration de la fonction qui vérifie si la commande est "exit" et termine le programme si c'est le cas.
+`void check_exit_command (char *buffer);`: Declaration of the function which checks if the order is "exit" and ends the program if this is the case.
 
-`char *find_command_path(const char *command)`; : Déclaration de la fonction qui trouve le chemin complet d'une commande en utilisant la `variable d'environnement` PATH.
+`Char *Find_Command_Path (Const Char *command);`: Declaration of the function which finds the full path of a command using the `Environment variable 'Path.
 
-char *my_getenv(const char *name); : Déclaration de la fonction qui récupère la valeur d'une `variable d'environnement`.
+`char *my_getenv (Const char *name);`: Declaration of the function which recovers the value of an `` environment variable '.
 
-`void free_argv(char **argv)`; : Déclaration de la fonction qui libère la mémoire allouée pour les arguments.
+`void free_argv (char ** argv);`: Declaration of the function which releases the memory allocated for the arguments.
 
-`char **split_string(int max_argument)`; : Déclaration de la fonction qui lit une ligne de commande et la divise en arguments.
+`char ** split_string (int max_argument;`;: Declaration of the function which reads a command line and divides it into arguments.
 
-`int execute_command(int max_argument, char **envp)`; : Déclaration de la fonction qui exécute les commandes.
+`int execute_command (int max_argument, char ** envp);`: Declaration of the function that performs orders.
 
-## Fonction print_env
+## Print_env function
 
-### Déclaration et initialisation :
+### Declaration and initialization:
 
-char **env; : Déclare un pointeur vers un pointeur de caractères, utilisé pour parcourir le tableau environ.
-env = environ; : Initialise env avec la variable globale environ, qui est un tableau de chaînes de caractères représentant les variables d'environnement.
-Boucle de parcours :
+char ** approx;: Declares a pointer towards a character pointer, used to browse the table approximately.
+Evil = approximately;: Initialized approximately with the global variable approximately, which is a table of character strings representing the environment variables.
+Course loop:
 
-while(*env) : La boucle continue tant que le pointeur env ne pointe pas sur NULL. Chaque élément du tableau environ est une chaîne de caractères représentant une `variable d'environnement`.
+While (*approx): The loop continues as long as the pointer approx does not point to null.Each element of the table approximately is a character string representing an `` environment variable '.
 
-`printf("%s\n", *env)`; : Affiche la chaîne de caractères pointée par env.
-env++; : Passe au prochain élément du tableau.
-
-
-## Fonction check_exit_command
-But : Vérifier si l'utilisateur a entré la commande "exit". Si c'est le cas, libérer la mémoire allouée pour `buffer` et quitter le programme.
-
-Comment :
-
-`strcmp(buffer, "exit") == 0` : Compare la chaîne de caractères dans `buffer` avec "exit". Si elles sont identiques, la fonction retourne 0, et donc la condition est vraie.
-
-Si la condition est vraie, le programme libère la mémoire allouée à `buffer` avec `free(buffer)` pour éviter les fuites de mémoire.
-
-`exit(0)` est ensuite appelé pour quitter proprement le programme avec un code de sortie 0, indiquant que tout s'est bien déroulé.
+`Printf ("%s \ n ", *approx)`;: Displays the character string pointed out by approx.
+Envis ++;: Go to the next element of the table.
 
 
-## Fonction find_command_path
+## Check_ Exit_command
+But: Check if the user entered the "exit" command.If this is the case, release the memory allocated for `Buffer` and leave the program.
 
-But : Trouver le chemin complet d'une commande en recherchant dans les répertoires spécifiés par la ``variable d'environnement`` .PATH
+How :
 
-#### Paramètre :
+`Strcmp (Buffer," exit ") == 0`: Compare the character string in` Buffer 'with "Exit".If they are identical, the function returns 0, and therefore the condition is true.
 
-command : Le nom de la commande à trouver.
+If the condition is true, the program releases the memory allocated to `Buffer 'with` free (buffer) `to avoid memory leaks.
 
-#### Retourne :
-
-Le chemin complet de la commande si elle est trouvée et exécutable.
-
-`NULL` si la commande n'est pas trouvée ou si une erreur survient.
-
-## Comment la fonction fonctionne :
-
-### Vérification de la commande absolue :
-
-Si la commande commence par un `.` (ce qui signifie qu'il s'agit d'un chemin absolu), la fonction vérifie si le fichier existe et est exécutable avec . Si c'est le cas, elle retourne une copie du chemin de la commande./access(command, X_OK)
-
-### Récupération de la `variable d'environnement` `PATH` :
-
-La fonction récupère la valeur de  à l'aide de . Cette variable contient une liste de répertoires séparés par des  où les commandes peuvent être trouvées.PATH my_getenv("PATH"):
-
-### Duplication et traitement de PATH :
-
-La variable  est dupliquée pour pouvoir être manipulée sans modifier la valeur originale. Cette duplication est nécessaire car  modifie la chaîne de caractères sur laquelle elle travaille.PATH`strtok`
-
-### Recherche dans chaque répertoire :
-
-La fonction utilise  pour diviser  en différents répertoires, puis construit le chemin complet en combinant chaque répertoire avec la commande à l'aide de .`strtok`path_copysnprintf
-Pour chaque chemin construit,  est utilisé pour vérifier si le fichier existe et est exécutable.access
-
-### Retour du chemin trouvé ou NULL :
-
-Si la commande est trouvée, la fonction retourne le chemin complet.
-Si la commande n'est pas trouvée après avoir parcouru tous les répertoires, la mémoire allouée est libérée, et la fonction retourne .NULL
+`Exit (0)` is then called to leave the program properly with a 0 output code, indicating that everything went well.
 
 
-## Fonctions et appels système autorisés :
+## FUNCTION FIND_COMMEMAND_PATH
 
-### 1. Fonctions de la bibliothèque standard C (string.h) :
-`strtok` : Divise une chaîne en sous-chaînes basées sur des délimiteurs. `man 3 strtok`
+But: to find the full path of an order by seeking in the directories specified by the `` environment variable '' .Path
 
-### 2. Fonctions liées aux fichiers et aux répertoires :
-- access : Vérifie les permissions d'accès à un fichier.
-- chdir : Change le répertoire de travail actuel.
-- close : Ferme un descripteur de fichier.
-- open : Ouvre un fichier et renvoie un descripteur de fichier.
-- opendir : Ouvre un répertoire et renvoie un pointeur vers ce répertoire.
-- closedir : Ferme un répertoire ouvert.
-- readdir : Lit une entrée de répertoire.
-- stat : Obtient les informations sur un fichier (mode, taille, etc.).
-- lstat : Semblable à stat, mais suit les liens symboliques.
-- fstat : Obtient les informations sur un fichier à partir d'un descripteur de fichier.
-- getcwd : Obtient le répertoire de travail actuel.
+#### Setting :
 
-### 3. Fonctions de gestion de la mémoire :
-- malloc : Alloue un bloc de mémoire.
-- free : Libère un bloc de mémoire alloué.
+Command: The name of the order to find.
 
-### 4. Fonctions d'entrée/sortie :
-- printf : Formate et affiche une chaîne sur la sortie standard.
-- fprintf : Formate et affiche une chaîne sur un flux spécifié.
-- vfprintf : Variante de fprintf qui prend une liste d'arguments de type va_list.
-- sprintf : Formate et stocke une chaîne dans un tampon.
-- putchar : Affiche un caractère sur la sortie standard.
-- fflush : Vide le tampon de sortie d'un flux.
-- getline : Lit une ligne depuis un flux et l'alloue dynamiquement.
-### 5. Fonctions liées aux processus :
-- fork : Crée un nouveau processus en dupliquant le processus appelant.
-- execve : Remplace l'image du processus en cours par un nouveau programme.
-- wait : Attend la fin d'un processus enfant.
-- waitpid : Attend la fin d'un processus enfant spécifique.
-- wait3 : Attend la fin d'un processus enfant et récupère des informations sur l'utilisation des ressources.
-- wait4 : Semblable à wait3, mais attend la fin d'un processus spécifique.
-- getpid : Obtient l'identifiant de processus du processus appelant.
-- kill : Envoie un signal à un processus.
-- signal : Change la façon dont les signaux sont traités.
+### returns:
 
-### 6. Fonctions de gestion des fichiers :
-- read : Lit des données depuis un descripteur de fichier.
-- write : Écrit des données sur un descripteur de fichier.
+The full path of the command if it is found and executable.
 
-### 7. Fonctions de gestion des descripteurs de fichier :
-- _exit : Termine immédiatement un processus sans appeler les fonctions de nettoyage.
-- exit : Termine un processus et appelle les fonctions de nettoyage avant la sortie.
+`Null if the order is not found or if an error occurs.
 
-### 8. Fonctions diverses :
-- isatty : Vérifie si un descripteur de fichier est associé à un terminal.
-- perror : Affiche un message d'erreur basé sur le code d'erreur global errno.
-- putchar : Affiche un caractère sur la sortie standard.
+## How the function works:
+### Check the absolute command:
+
+If the command begins with a `. '(Which means that it is an absolute path), the function checks if the file exists and is executable with.If this is the case, she returns a copy of the order of the command./access( Process, x_ok)
+
+### Recovery of the environment:
+
+The function recovers the value of using.This variable contains a list of directories separated by where commands can be found. Path my_getenv ("path"):
+
+### Duplication and path treatment:
+
+The variable is duplicated to be manipulated without modifying the original value.This duplication is necessary because changes the character string on which it works.
+
+### Search in each repertoire:
+
+The function uses to divide into different directories, then builds the full path by combining each directory with the command using.'Strtok`path_copysnprintf
+For each path built, is used to check if the file exists and is executable.
+
+### Back to the path found or null:
+
+If the order is found, the function returns to the full path.
+If the order is not found after having traveled all the directories, the allocated memory is released, and the function returns.
+
+
+## Authorized System Functions and Calls:
+
+### 1. Functions of the standard library C (String.h):
+`Strtok`: divides a chain into sub-chain based on delimitors.
+
+### 2. Functions related to files and directories:
+- Access: Check the access permissions to a file.
+- Chdir: Changes the current work directory.
+- Close: closes a file descriptor.
+- Open: opens a file and returns a file descriptor.
+- Opendir: opens a repertoire and returns a pointer to this repertoire.
+- Closedir: closes an open directory.
+- Readdir: bed a directory entrance.
+- Stat: Obtains information on a file (mode, size, etc.).
+- LSTAT: Similar to stat, but follows symbolic links.
+- FSTAT: Gets information on a file from a file descriptor.
+- GetcWD: Obtains the current work directory.
+
+### 3. Memory management functions:
+- Malloc: allocates a block of memory.
+- Free: release a allocated memory block.
+
+### 4. Input/output functions:
+- Printf: Formate and displays a chain on the standard output.
+- FPRINTF: Format and displays a chain on a specified flow.
+- VFPRINTF: Variant of Fprintf which takes a list of VA_List type arguments.
+- Sprintf: format and stores a chain in a stamp.
+- putchar: displays a character on the standard output.
+- FFLUSH: empty the output stamp of a flow.
+- Getline: reads a line from a flow and allocates it dynamically.
+### 5. Functions related to processes:
+- Fork: Creates a new process by duplicating the calling process.
+- Exercise: replaces the image of the current process with a new program.
+- Wait: Wait for the end of a child process.
+- Waitpid: awaits the end of a specific child process.
+- Wait3: awaits the end of a child process and recovers information on the use of resources.
+- Wait4: similar to Wait3, but awaits the end of a specific process.
+- Getpid: Obtains the process identifier of the calling process.
+- Kill: Send a signal to a process.
+- Signal: Change the way the signals are processed.
+
+### 6. File management functions:
+- READ: Data bed from a file descriptor.
+- Write: writes data on a file descriptor.
+
+### 7. File management functions:
+- _Exit: immediately ends a process without calling the cleaning functions.
+- Exit: ends a process and calls for cleaning functions before output.
+
+### 8. Various functions:
+- Isatty: check if a file descriptor is associated with a terminal.
+- Perror: displays an error message based on the Errno Global Error Code.
+- putchar: displays a character on the standard output.
 
 ### Contributors
 Stef R, Lamine.M.B
