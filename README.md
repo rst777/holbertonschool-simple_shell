@@ -127,17 +127,22 @@ sortie:
 
 Protective guard (#ifndef, #define, #endif):
 
-Library inclusions:
+### Library inclusions:
 
 You include the necessary standard libraries (Stdio.h, Stdlib.h, Unistd.h, String.h, Sys/Type.h, Sys/Wait.h).These inclusions provide the necessary definitions for the functions and types used in your code.
 Declaration of external variables:
 
 approximately char **;: Declares the approximately global variable which contains the environment variables.It is a good practice to declare approximately as extern if it is used in several source files.
-Definition of constants:
 
-#define max_arguments 50: Defines the maximum number of arguments that the shell can manage.You can adjust this value according to your needs.
-#define max_command_length 1024: defines the maximum length of a command.You can also adjust this value according to the needs of your shell.
-Function declaration:
+## Definition macros :
+
+### define max_arguments 50:
+Defines the maximum number of arguments that the shell can manage.You can adjust this value according to your needs.
+
+#define max_command_length 1024:
+defines the maximum length of a command.You can also adjust this value according to the needs of your shell.
+
+### Function declaration:
 
 `void print_env (void);`: Declaration of the function that displays the environment variables.
 
@@ -155,17 +160,12 @@ Function declaration:
 
 ## Print_env function
 
-### Declaration and initialization:
+Declares a function that will display all current environment variables.
 
-char ** approx;: Declares a pointer towards a character pointer, used to browse the table approximately.
-Evil = approximately;: Initialized approximately with the global variable approximately, which is a table of character strings representing the environment variables.
-Course loop:
+## extern char **environ; :
 
-While (*approx): The loop continues as long as the pointer approx does not point to null.Each element of the table approximately is a character string representing an `` environment variable '.
-
-`Printf ("%s \ n ", *approx)`;: Displays the character string pointed out by approx.
-Envis ++;: Go to the next element of the table.
-
+This line declares an approximately external variable which contains environmental variables for the program.
+It is a table of pointers on character strings, each chain representing an environment variable in the name form = value.
 
 ## Check_ Exit_command
 But: Check if the user entered the "exit" command.If this is the case, release the memory allocated for `Buffer` and leave the program.
@@ -179,7 +179,7 @@ If the condition is true, the program releases the memory allocated to `Buffer '
 `Exit (0)` is then called to leave the program properly with a 0 output code, indicating that everything went well.
 
 
-## FUNCTION FIND_COMMEMAND_PATH
+## FUNCTION FIND_COMMAND_PATH
 
 But: to find the full path of an order by seeking in the directories specified by the `` environment variable '' .Path
 
